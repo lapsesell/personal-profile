@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>刘伟 · 个人简介</title>
+<meta name="description" content="刘伟的个人简介页 — Java 后端学习之路、技能栈与项目实践">
+<style>
+  :root {
+    --bg: #0b1020;
+    --bg-soft: #111730;
+    --card: rgba(255, 255, 255, 0.045);
+    --card-border: rgba(255, 255, 255, 0.09);
+    --text: #e8ecf8;
+    --text-dim: #9aa5c3;
+    --accent: #6ea8ff;
+    --accent-2: #8f7bff;
+    --accent-3: #4dd6c1;
+    --radius: 16px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  /* 背景光晕 */
+  .glow { position: fixed; border-radius: 50%; filter: blur(90px); opacity: .22; z-index: -1; pointer-events: none; }
+  .glow.g1 { width: 480px; height: 480px; background: var(--accent); top: -140px; left: -120px; }
+  .glow.g2 { width: 420px; height: 420px; background: var(--accent-2); bottom: -120px; right: -100px; }
+  .glow.g3 { width: 300px; height: 300px; background: var(--accent-3); top: 40%; left: 55%; opacity: .12; }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+
+  /* 顶部导航 */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: blur(14px);
+    background: rgba(11, 16, 32, .72);
+    border-bottom: 1px solid var(--card-border);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  nav .logo { font-weight: 700; letter-spacing: .5px; }
+  nav .logo span { color: var(--accent); }
+  nav a.link { color: var(--text-dim); text-decoration: none; margin-left: 22px; font-size: 15px; transition: color .2s; }
+  nav a.link:hover { color: var(--text); }
+
+  /* Hero */
+  header { padding: 96px 0 72px; text-align: center; }
+  .avatar {
+    width: 108px; height: 108px; border-radius: 50%;
+    margin: 0 auto 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 44px; font-weight: 700; color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 8px 40px rgba(110, 168, 255, .35);
+    border: 3px solid rgba(255,255,255,.14);
+  }
+  h1 { font-size: clamp(30px, 6vw, 46px); font-weight: 800; letter-spacing: 1px; }
+  h1 .grad {
+    background: linear-gradient(90deg, var(--accent), var(--accent-3));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .subtitle { margin-top: 14px; color: var(--text-dim); font-size: clamp(15px, 2.6vw, 18px); }
+  .typing { color: var(--accent-3); font-weight: 600; }
+  .hero-cta { margin-top: 32px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    padding: 11px 26px; border-radius: 999px; text-decoration: none;
+    font-size: 15px; font-weight: 600; transition: transform .15s, box-shadow .2s, background .2s;
+    display: inline-block;
+  }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; box-shadow: 0 6px 24px rgba(110,168,255,.3); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(110,168,255,.45); }
+  .btn-ghost { border: 1px solid var(--card-border); color: var(--text); background: var(--card); }
+  .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+  /* 通用 section */
+  section { padding: 56px 0; }
+  h2 { font-size: 26px; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
+  h2::before { content: ""; width: 6px; height: 26px; border-radius: 3px; background: linear-gradient(180deg, var(--accent), var(--accent-2)); }
+
+  .card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 24px 26px;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: rgba(110,168,255,.4); box-shadow: 0 12px 32px rgba(0,0,0,.35); }
+
+  /* 关于我 */
+  .about p { color: var(--text-dim); font-size: 16.5px; }
+  .about p + p { margin-top: 14px; }
+  .about strong { color: var(--text); }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 22px; }
+  .fact { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px 18px; font-size: 14.5px; color: var(--text-dim); }
+  .fact b { display: block; color: var(--text); font-size: 15.5px; margin-bottom: 3px; }
+
+  /* 技能 */
+  .skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+  .skill .icon { font-size: 30px; }
+  .skill h3 { font-size: 17px; margin: 10px 0 6px; }
+  .skill p { color: var(--text-dim); font-size: 14px; }
+  .bar { margin-top: 12px; height: 7px; background: rgba(255,255,255,.07); border-radius: 99px; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent-3)); width: 0; transition: width 1.1s cubic-bezier(.2,.7,.2,1); }
+
+  /* 时间线 */
+  .timeline { position: relative; margin-left: 8px; padding-left: 26px; border-left: 2px solid rgba(110,168,255,.25); }
+  .titem { position: relative; padding-bottom: 30px; }
+  .titem:last-child { padding-bottom: 0; }
+  .titem::before {
+    content: ""; position: absolute; left: -34px; top: 6px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 0 4px rgba(110,168,255,.2);
+  }
+  .titem time { color: var(--accent-3); font-size: 13.5px; font-weight: 600; }
+  .titem h3 { font-size: 17px; margin: 4px 0 6px; }
+  .titem p { color: var(--text-dim); font-size: 15px; }
+
+  /* 项目 */
+  .projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+  .proj h3 { font-size: 17.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .proj p { color: var(--text-dim); font-size: 14.5px; }
+  .tags { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-size: 12.5px; padding: 3px 11px; border-radius: 99px; background: rgba(110,168,255,.13); color: var(--accent); border: 1px solid rgba(110,168,255,.25); }
+
+  /* 联系 */
+  .contact-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .contact-card { flex: 1 1 260px; display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--text); }
+  .contact-card .icon { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; background: rgba(110,168,255,.14); border: 1px solid rgba(110,168,255,.3); }
+  .contact-card b { display: block; font-size: 15.5px; }
+  .contact-card span { color: var(--text-dim); font-size: 13.5px; word-break: break-all; }
+
+  footer { text-align: center; padding: 44px 0 36px; color: var(--text-dim); font-size: 13.5px; border-top: 1px solid var(--card-border); margin-top: 40px; }
+  footer .heart { color: #ff6b81; }
+
+  /* 入场动画 */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.on { opacity: 1; transform: none; }
+
+  @media (max-width: 560px) {
+    header { padding: 70px 0 50px; }
+    nav a.link { margin-left: 14px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">刘伟<span>.dev</span></div>
+    <div>
+      <a class="link" href="#about">关于</a>
+      <a class="link" href="#skills">技能</a>
+      <a class="link" href="#journey">历程</a>
+      <a class="link" href="#projects">项目</a>
+      <a class="link" href="#contact">联系</a>
+    </div>
+  </div>
+</nav>
+
+<header class="wrap">
+  <div class="avatar">刘</div>
+  <h1>你好，我是<span class="grad"> 刘伟 </span>👋</h1>
+  <p class="subtitle">一名热爱钻研的 <span class="typing" id="typing"></span><span class="typing">|</span></p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="#projects">看看我的项目</a>
+    <a class="btn btn-ghost" href="https://github.com/lapsesell" target="_blank" rel="noopener">GitHub · lapsesell</a>
+  </div>
+</header>
+
+<section id="about" class="wrap about reveal">
+  <h2>关于我</h2>
+  <div class="card">
+    <p>我是<strong>刘伟</strong>，一名正在系统学习 <strong>Java 后端开发</strong>的学习者 / 开发者。目前专注于 Java 语言、数据库与网络基础的打牢，同时也对各种开发工具和 <strong>AI 编程助手</strong>充满好奇——喜欢折腾新工具，让学习和开发更高效。</p>
+    <p>我相信<strong>动手实践</strong>是最好的老师：从 CentOS 虚拟机里敲命令，到用 Cisco Packet Tracer 搭网络拓扑，再到一行行写出自己的后端项目，我享受把知识变成"能跑起来"的东西的过程。</p>
+    <div class="facts">
+      <div class="fact"><b>🎯 当前方向</b>Java 后端开发（Spring 生态）</div>
+      <div class="fact"><b>📚 在学课程</b>JavaWeb · 数据库 · 计算机网络</div>
+      <div class="fact"><b>🛠 常用系统</b>Windows + CentOS 虚拟机</div>
+      <div class="fact"><b>⚡ 性格标签</b>动手派 · 工具控 · 持续学习</div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="wrap reveal">
+  <h2>技能栈</h2>
+  <div class="skills">
+    <div class="card skill"><div class="icon">☕</div><h3>Java / JavaWeb</h3><p>面向对象、集合、多线程基础；Servlet 与 Maven 项目实践</p><div class="bar"><i data-w="82%"></i></div></div>
+    <div class="card skill"><div class="icon">🗄️</div><h3>MySQL / 数据库</h3><p>SQL 编写、索引与事务概念，用 DataGrip 管理与调试数据</p><div class="bar"><i data-w="72%"></i></div></div>
+    <div class="card skill"><div class="icon">🐧</div><h3>Linux (CentOS)</h3><p>常用命令、网络配置（ifcfg / netinfo）、虚拟机环境搭建</p><div class="bar"><i data-w="70%"></i></div></div>
+    <div class="card skill"><div class="icon">🌐</div><h3>计算机网络</h3><p>TCP/IP 基础，Cisco Packet Tracer 拓扑实验与抓包分析</p><div class="bar"><i data-w="68%"></i></div></div>
+    <div class="card skill"><div class="icon">🔧</div><h3>Git / 工具链</h3><p>Git 版本管理；IDEA、VS Code、VMware 等日常开发环境</p><div class="bar"><i data-w="75%"></i></div></div>
+    <div class="card skill"><div class="icon">🤖</div><h3>AI 辅助开发</h3><p>深度使用 AI 编程助手（DeepSeek Harness 等）提效学习与开发</p><div class="bar"><i data-w="80%"></i></div></div>
+  </div>
+</section>
+
+<section id="journey" class="wrap reveal">
+  <h2>学习历程</h2>
+  <div class="timeline">
+    <div class="titem"><time>入门阶段</time><h3>编程启蒙 · 环境搭建</h3><p>从 Java 基础语法开始，配好 IDEA、JDK、虚拟机与 Linux 环境，养成了边学边记的习惯。</p></div>
+    <div class="titem"><time>进阶阶段</time><h3>数据库与网络基础</h3><p>系统学习 MySQL 与计算机网络，完成 Cisco Packet Tracer 系列拓扑实验，理解数据在网络上如何流动。</p></div>
+    <div class="titem"><time>实践阶段</time><h3>JavaWeb 项目实战</h3><p>跟着项目驱动课程（tlias 等）做完整的后端案例：请求响应、分层解耦、MySQL 配合增删改查、登录认证。</p></div>
+    <div class="titem"><time>现在</time><h3>深入 Spring 生态 · 拥抱 AI 工具</h3><p>继续深入 Spring Boot 与中间件，同时把 AI 编程助手融入日常开发流，探索更高效的学习与工作方式。</p></div>
+  </div>
+</section>
+
+<section id="projects" class="wrap reveal">
+  <h2>项目与实践</h2>
+  <div class="projects">
+    <div class="card proj">
+      <h3>📦 tlias 智能学习辅助系统 <span class="tag">课程实战</span></h3>
+      <p>完整的 JavaWeb 后端案例：部门与员工管理、文件上传、登录认证与拦截器，掌握三层架构与依赖注入。</p>
+      <div class="tags"><span class="tag">Java</span><span class="tag">MySQL</span><span class="tag">Maven</span></div>
+    </div>
+    <div class="card proj">
+      <h3>🌐 网络拓扑实验集 <span class="tag">网络实验</span></h3>
+      <p>用 Cisco Packet Tracer 完成 VLAN 划分、静态路由、DHCP 等系列实验，配合 Wireshark 观察协议交互。</p>
+      <div class="tags"><span class="tag">Cisco PT</span><span class="tag">TCP/IP</span></div>
+    </div>
+    <div class="card proj">
+      <h3>🐧 CentOS 网络配置手册 <span class="tag">Linux 实践</span></h3>
+      <p>整理虚拟机网络模式、ifcfg-ens33 配置与常见网络排障流程，形成自己的 Linux 速查笔记。</p>
+      <div class="tags"><span class="tag">Linux</span><span class="tag">VMware</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="wrap reveal">
+  <h2>联系我</h2>
+  <div class="contact-row">
+    <a class="card contact-card" href="https://github.com/lapsesell" target="_blank" rel="noopener">
+      <div class="icon">🐙</div>
+      <div><b>GitHub</b><span>github.com/lapsesell</span></div>
+    </a>
+    <a class="card contact-card" href="mailto:2231198134@qq.com">
+      <div class="icon">📮</div>
+      <div><b>邮箱</b><span>2231198134@qq.com</span></div>
+    </a>
+    <div class="card contact-card" id="qq-card" style="cursor:pointer" title="点击复制">
+      <div class="icon">💬</div>
+      <div><b>QQ</b><span>2231198134（点击复制）</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>用 <span class="heart">♥</span> 和一行行代码写成 · 刘伟 · <span id="year"></span></p>
+  <p style="margin-top:6px; opacity:.7">保持好奇，持续构建。</p>
+</footer>
+
+<script>
+  // 打字机效果
+  const words = ["Java 学习者", "后端开发练习生", "网络爱好者", "AI 工具折腾党"];
+  let wi = 0, ci = 0, del = false;
+  const el = document.getElementById("typing");
+  (function tick() {
+    const w = words[wi];
+    el.textContent = w.slice(0, ci);
+    if (!del && ci < w.length) { ci++; setTimeout(tick, 120); }
+    else if (!del) { del = true; setTimeout(tick, 1400); }
+    else if (ci > 0) { ci--; setTimeout(tick, 55); }
+    else { del = false; wi = (wi + 1) % words.length; setTimeout(tick, 300); }
+  })();
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // 滚动入场
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add("on");
+      e.target.querySelectorAll(".bar i").forEach(b => b.style.width = b.dataset.w);
+      io.unobserve(e.target);
+    }
+  }), { threshold: .12 });
+  document.querySelectorAll(".reveal").forEach(x => io.observe(x));
+
+  // 复制 QQ
+  document.getElementById("qq-card").addEventListener("click", function () {
+    navigator.clipboard.writeText("2231198134").then(() => {
+      const span = this.querySelector("span");
+      const old = span.textContent;
+      span.textContent = "已复制 ✓";
+      setTimeout(() => span.textContent = old, 1500);
+    });
+  });
+</script>
+</body>
+</html>
